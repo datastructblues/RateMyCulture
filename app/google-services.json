@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "945609598109",
+    "project_id": "ratemyculture-81b86",
+    "storage_bucket": "ratemyculture-81b86.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945609598109:android:79e97eb69784280abf6074",
+        "android_client_info": {
+          "package_name": "com.example.ratemyculture"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945609598109-b1iki84td3io72cjbhi2jcked4aes3uv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwmv2azQplS-6KTGYVrNxa0ldc5H4wfjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945609598109-b1iki84td3io72cjbhi2jcked4aes3uv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

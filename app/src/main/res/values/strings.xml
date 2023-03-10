@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">RateMyCulture</string>
+    <string name="sign_in">Sign In </string>
+    <string name="sign_up"><u>Sign up</u> </string>
+    <string name="sign_up_title">Sign up</string>
+    <string name="mail">E-Mail</string>
+    <string name="password_hint">Password </string>
+    <string name="name_hint">Full Name </string>
+    <string name="confirm_password_hint">Confirm Password </string>
+    <string name="login">LOGIN</string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="connect_with">or connect with</string>
+    <string name="account_question">Don\'t have account?</string>
+    <string name="sign_in_with">Sign in with</string>
+</resources>
