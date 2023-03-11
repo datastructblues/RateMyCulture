@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.156" />
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/nameTextField"
             style="@style/AppTextField"
             android:background="@drawable/bg_textfield"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.261" />
 
-        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordTextField"
             style="@style/AppTextField"
             android:hint="@string/password_hint"
@@ -126,7 +126,7 @@
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="@font/blinker_regular"
-            android:onClick="startSignUpActivity"
+            android:onClick="@{() -> viewModel.startSignUpActivity()}"
             android:text="@string/sign_up"
             android:textColor="@color/white"
             android:textSize="12sp"
