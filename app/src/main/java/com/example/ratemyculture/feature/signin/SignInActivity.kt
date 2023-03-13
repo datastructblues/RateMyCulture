@@ -35,7 +35,6 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if (requestCode == RC_SIGN_IN) {
             viewModel.handleGoogleSignInResult(data)
         }
@@ -46,17 +45,15 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
         super.onStart()
         val currentUser = viewModel.firebaseAuth.currentUser
         if (currentUser != null) {
-
+            // Kullanıcı oturum açmış, anasayfaya yönlendirilir
         } else {
             // Kullanıcı oturum açmamış, giriş yapması istenir
         }
     }
 
     // onDestroy metodu, gereksiz nesnelerin temizlenmesi
-  /*  override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
         viewModel.cleanUp()
     }
-
-   */
 }
