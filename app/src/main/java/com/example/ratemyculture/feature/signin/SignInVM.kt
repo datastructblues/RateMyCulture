@@ -103,7 +103,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
                     if(task.result?.additionalUserInfo?.isNewUser == true){
                         fbDatabase.collection("googleUsers")
                             .document(firebaseAuth.currentUser?.uid.toString())
-                            .set(GoogleUser(firebaseAuth.currentUser?.email.toString()))
+                            .set(GoogleUser(firebaseAuth.currentUser?.displayName.toString(),firebaseAuth.currentUser?.email.toString()))
                     }
                     val user = FirebaseAuth.getInstance().currentUser
                     Log.d(TAG, "onActivityResult: " + user.toString())
@@ -129,7 +129,6 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
                 ?.let { GoogleSignIn.getClient(it, gso) }!!
     }
 
-    // Activity ömrü sona erdiğinde gereksiz nesnelerin temizlenmesi
     fun cleanUp() {
         mGoogleSignInClient.signOut()
         firebaseAuth.signOut()
