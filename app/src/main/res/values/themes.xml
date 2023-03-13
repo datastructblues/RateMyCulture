@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.RateMyCulture" parent="Theme.MaterialComponents">
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/teal_200</item>
@@ -24,5 +24,18 @@
         <item name="android:textColorHint">@color/hint_color</item>ü
         <item name="android:textColor">@color/white</item>
 
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/red</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="NeutralButtonStyle"
+        parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>

@@ -13,4 +13,5 @@
     <color name="button_pressed">#E5E5CB</color>
     <color name="text_color_gray">#7A7A7A</color>
     <color name="transparent">#00000000</color>
+    <color name="red">#FF0000</color>
 </resources>

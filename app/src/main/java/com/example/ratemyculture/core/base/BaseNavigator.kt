@@ -23,4 +23,5 @@ interface BaseNavigator {
         buttonTwo: String?, buttonTwoListener: DialogInterface.OnClickListener?,
         buttonThree: String?, buttonThreeListener: DialogInterface.OnClickListener?
     )
+    fun showToast(context: Context, message: String, isLengthLong: Boolean)
 }

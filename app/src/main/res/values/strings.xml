@@ -4,12 +4,19 @@
     <string name="sign_up"><u>Sign up</u> </string>
     <string name="sign_up_title">Sign up</string>
     <string name="mail">E-Mail</string>
-    <string name="password_hint">Password </string>
-    <string name="name_hint">Full Name </string>
+    <string name="password_hint">Password</string>
+    <string name="name_hint">Username</string>
     <string name="confirm_password_hint">Confirm Password </string>
     <string name="login">LOGIN</string>
     <string name="forgot_password">Forgot your password?</string>
     <string name="connect_with">or connect with</string>
     <string name="account_question">Don\'t have account?</string>
     <string name="sign_in_with">Sign in with</string>
+    <string name="error_title">Error</string>
+    <string name="error_message_login">Please enter email and password.</string>
+    <string name="ok">OK</string>
+    <string name="error_message_sign_up">Unsuccessful Sign up</string>
+    <string name="retry">Please Retry</string>
+    <string name="sign_in_successful">Sign in Successful</string>
+    <string name="sign_up_successful">Sign up Successful</string>
 </resources>

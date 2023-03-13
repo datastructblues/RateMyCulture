@@ -19,23 +19,10 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
         get() = R.layout.activity_sign_in
     override val viewModel: SignInVM = SignInVM()
     private var mBinding: ActivitySignInBinding? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = super.viewDataBinding
         viewModel.navigator = this
-
-    }
-
-
-    private fun checkIntentData(): Intent {
-        return Intent(this@SignInActivity, SignUpActivity::class.java)
-    }
-
-    fun startSignUpActivity(view:View){
-        println("SignInActivity.startSignUpActivity")
-        checkIntentData().let {
-            startActivity(it)
-            finish()
-        }
     }
 }

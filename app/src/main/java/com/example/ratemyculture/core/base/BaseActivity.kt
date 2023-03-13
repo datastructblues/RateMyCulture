@@ -36,6 +36,12 @@ abstract class BaseActivity<T: ViewDataBinding, V: BaseViewModel<*>> : AppCompat
      * @return variable id
      */
     abstract val bindingVariable: Int
+    override fun showToast(context: Context, message: String,isLengthLong:Boolean) {
+        if (isLengthLong)
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        else
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
 
     /**
      * @return layout resource id
