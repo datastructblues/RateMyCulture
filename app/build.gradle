@@ -62,5 +62,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.databinding:databinding-runtime:7.2.0'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.10'
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
 
 }

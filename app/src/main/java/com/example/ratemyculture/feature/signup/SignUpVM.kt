@@ -26,12 +26,22 @@ class SignUpVM : BaseViewModel<BaseNavigator>() {
         val username = username.get()!!
         val email = email.get()!!
         val password = password.get()!!
-        if (email.isEmpty() || password.isEmpty()) {
-            navigator?.showAlert(
-                getLocalizedString(R.string.error_title),
-                getLocalizedString(R.string.error_message_login),
-                getLocalizedString(R.string.ok)
-            ) { dialog, _ -> dialog.dismiss() }
+        val passwordConfirm = passwordConfirm.get()!!
+
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty() || passwordConfirm.isEmpty()) {
+            if (password != passwordConfirm) {
+                navigator?.showAlert(
+                    getLocalizedString(R.string.error_title),
+                    getLocalizedString(R.string.password_not_match),
+                    getLocalizedString(R.string.ok)
+                ) { dialog, _ -> dialog.dismiss() }
+            } else {
+                navigator?.showAlert(
+                    getLocalizedString(R.string.error_title),
+                    getLocalizedString(R.string.error_message_login),
+                    getLocalizedString(R.string.ok)
+                ) { dialog, _ -> dialog.dismiss() }
+            }
         } else {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
