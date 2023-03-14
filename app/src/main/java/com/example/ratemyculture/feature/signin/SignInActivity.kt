@@ -8,6 +8,7 @@ import com.example.ratemyculture.R
 import com.example.ratemyculture.core.base.BaseActivity
 import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.databinding.ActivitySignInBinding
+import com.example.ratemyculture.feature.profile.ProfileActivity
 
 
 class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavigator {
@@ -45,7 +46,8 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
         super.onStart()
         val currentUser = viewModel.firebaseAuth.currentUser
         if (currentUser != null) {
-            // Kullanıcı oturum açmış, anasayfaya yönlendirilir
+            // Kullanıcı oturum açmış, profil sayfasına yönlendirilir
+           // openActivity(Intent(this,ProfileActivity::class.java), true)
         } else {
             // Kullanıcı oturum açmamış, giriş yapması istenir
         }
