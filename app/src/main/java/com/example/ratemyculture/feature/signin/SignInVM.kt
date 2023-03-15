@@ -28,11 +28,9 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
     var email = ObservableField<String>("")
     var password = ObservableField<String>("")
 
-    private val RC_SIGN_IN = 123
     lateinit var mGoogleSignInClient: GoogleSignInClient
     val firebaseAuth by lazy { Firebase.auth }
     val fbDatabase by lazy { Firebase.firestore }
-
 
 
     fun credentialLogin() {
@@ -44,7 +42,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
                 getLocalizedString(R.string.error_message_login),
                 getLocalizedString(R.string.ok)
             ) { dialog, _ -> dialog.dismiss() }
-        }else{
+        } else {
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -67,14 +65,14 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
         }
     }
 
-     private fun checkIntentData(): Intent? {
+    private fun checkIntentData(): Intent? {
         navigator?.getContext()?.let {
             return Intent(it, SignUpActivity::class.java)
         }
         return null
     }
 
-    fun startSignUpActivity(){
+    fun startSignUpActivity() {
         println("SignInActivity.startSignUpActivity")
         checkIntentData()?.let {
             navigator?.openActivity(it, false)
@@ -99,12 +97,19 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
 
     private fun firebaseAuthWithGoogle(credential: AuthCredential) {
         firebaseAuth.signInWithCredential(credential)
-            .addOnCompleteListener{ task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    if(task.result?.additionalUserInfo?.isNewUser == true){
+                    if (task.result?.additionalUserInfo?.isNewUser == true) {
                         fbDatabase.collection("googleUsers")
                             .document(firebaseAuth.currentUser?.uid.toString())
-                            .set(GoogleUser(firebaseAuth.currentUser?.displayName.toString(),firebaseAuth.currentUser?.email.toString()))
+                            .set(
+                                GoogleUser(
+                                    firebaseAuth.currentUser?.email.toString(),
+                                    firebaseAuth.currentUser?.displayName.toString(),
+                                    0,
+                                    firebaseAuth.currentUser?.photoUrl.toString()
+                                )
+                            )
                     }
                     val user = FirebaseAuth.getInstance().currentUser
                     openProfileActivity()
@@ -135,7 +140,9 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
         mGoogleSignInClient.signOut()
         firebaseAuth.signOut()
     }
-    private fun openProfileActivity(){
-        navigator?.openActivity(Intent(navigator?.getContext(), ProfileActivity::class.java), true)
+
+    private fun openProfileActivity() {
+        val intent = Intent(navigator?.getContext(), ProfileActivity::class.java).putExtra("uid", firebaseAuth.currentUser?.uid.toString())
+        navigator?.openActivity(intent, true)
     }
 }

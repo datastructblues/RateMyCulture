@@ -57,7 +57,7 @@ class SignUpVM : BaseViewModel<BaseNavigator>() {
                         //There is no need for new user control as in google sign, because if the create process is successful, it enters here
                         fbDatabase.collection("users")
                             .document(firebaseAuth.currentUser?.uid.toString())
-                            .set(User(username, email, password))
+                            .set(User(email, username, password, 0, null))
 
                         navigator?.openActivity(
                             Intent(

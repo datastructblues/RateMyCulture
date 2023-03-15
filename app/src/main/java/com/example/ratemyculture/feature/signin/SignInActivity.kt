@@ -42,6 +42,8 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
     }
 
     // onStart metodu, kullanıcı oturum açmış mı kontrolü yapılır
+
+    /*
     override fun onStart() {
         super.onStart()
         val currentUser = viewModel.firebaseAuth.currentUser
@@ -52,6 +54,8 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
             // Kullanıcı oturum açmamış, giriş yapması istenir
         }
     }
+
+     */
 
     // onDestroy metodu, gereksiz nesnelerin temizlenmesi
     override fun onDestroy() {

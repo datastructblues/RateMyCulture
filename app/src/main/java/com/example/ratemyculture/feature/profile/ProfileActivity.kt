@@ -20,5 +20,10 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileVM>(), BaseN
         super.onCreate(savedInstanceState)
         mBinding = super.viewDataBinding
         viewModel.navigator = this
+        val uid = getIntentData()
+        viewModel.getCurrentUserProfileData(uid)
     }
+
+    private fun getIntentData():String{
+        return intent.getStringExtra("uid").toString()}
 }
