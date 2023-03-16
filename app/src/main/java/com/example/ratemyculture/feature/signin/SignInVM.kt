@@ -29,8 +29,8 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
     var password = ObservableField<String>("")
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
-    val firebaseAuth by lazy { Firebase.auth }
-    val fbDatabase by lazy { Firebase.firestore }
+    private val firebaseAuth by lazy { Firebase.auth }
+    private val fbDatabase by lazy { Firebase.firestore }
 
 
     fun credentialLogin() {
