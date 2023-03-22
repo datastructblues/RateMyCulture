@@ -123,7 +123,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
                 }
             }
     }
-
+//google login
     fun init() {
         val gso =
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -135,7 +135,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
             navigator?.getContext()
                 ?.let { GoogleSignIn.getClient(it, gso) }!!
     }
-
+//signout
     fun cleanUp() {
         mGoogleSignInClient.signOut()
         firebaseAuth.signOut()

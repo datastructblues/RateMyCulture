@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -14,10 +14,18 @@
         android:theme="@style/Theme.RateMyCulture"
         tools:targetApi="31">
         <activity
+            android:name=".MapsActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${GOOGLE_MAPS_API_KEY}" />
+
+        <activity
             android:name=".feature.profile.ProfileActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.RateMyCulture.NoActionBar"/>
+            android:theme="@style/Theme.RateMyCulture.NoActionBar" />
         <activity
             android:name=".feature.signup.SignUpActivity"
             android:exported="false"
