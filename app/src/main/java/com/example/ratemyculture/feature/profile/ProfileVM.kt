@@ -59,6 +59,5 @@ class ProfileVM : BaseViewModel<BaseNavigator>() {
                 }
             }
         }
-
     }
 }

@@ -9,7 +9,7 @@ import com.example.ratemyculture.R
 import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.core.base.BaseViewModel
 import com.example.ratemyculture.data.authentication.model.GoogleUser
-import com.example.ratemyculture.feature.profile.ProfileActivity
+import com.example.ratemyculture.feature.main.MainActivity
 import com.example.ratemyculture.feature.signup.SignUpActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -112,7 +112,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
                             )
                     }
                     val user = FirebaseAuth.getInstance().currentUser
-                    openProfileActivity()
+                    openMainActivity()
                     Log.d(TAG, "onActivityResult: " + user.toString())
                 } else {
                     navigator?.showAlert(
@@ -141,8 +141,8 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
         firebaseAuth.signOut()
     }
 
-    private fun openProfileActivity() {
-        val intent = Intent(navigator?.getContext(), ProfileActivity::class.java).putExtra("uid", firebaseAuth.currentUser?.uid.toString())
+    private fun openMainActivity() {
+        val intent = Intent(navigator?.getContext(), MainActivity::class.java).putExtra("uid", firebaseAuth.currentUser?.uid.toString())
         navigator?.openActivity(intent, true)
     }
 }

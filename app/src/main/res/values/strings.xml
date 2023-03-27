@@ -21,4 +21,8 @@
     <string name="sign_up_successful">Sign up Successful</string>
     <string name="password_not_match">Password does not match</string>
     <string name="web_client_id">945609598109-h821tustjgendev93mkli7feff567ido.apps.googleusercontent.com</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_maps">Map</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
