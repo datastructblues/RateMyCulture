@@ -23,7 +23,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileVM>(), BaseN
         val uid = getIntentData()
         viewModel.getCurrentUserProfileData(uid)
     }
-
+// burayi duzelt activity to fragment once.
     private fun getIntentData():String{
         return intent.getStringExtra("uid").toString()}
 }
