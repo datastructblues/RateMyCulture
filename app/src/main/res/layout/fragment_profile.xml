@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.ratemyculture.feature.profile.ProfileVM" />
+            type="com.example.ratemyculture.feature.main.profile.ProfileFragmentVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +20,7 @@
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_marginTop="96dp"
-            app:civ_border_color="@color/black"
+            app:civ_border_color="@color/white"
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
@@ -36,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_marginTop="24dp"
-            android:text="UMUT"
+            android:text="@{viewModel.username}"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"

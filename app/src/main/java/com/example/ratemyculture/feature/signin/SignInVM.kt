@@ -11,6 +11,8 @@ import com.example.ratemyculture.core.base.BaseViewModel
 import com.example.ratemyculture.data.authentication.model.GoogleUser
 import com.example.ratemyculture.feature.main.MainActivity
 import com.example.ratemyculture.feature.signup.SignUpActivity
+import com.example.ratemyculture.util.fbDatabase
+import com.example.ratemyculture.util.firebaseAuth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -29,9 +31,6 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
     var password = ObservableField<String>("")
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
-    val firebaseAuth by lazy { Firebase.auth }
-    val fbDatabase by lazy { Firebase.firestore }
-
 
     fun credentialLogin() {
         val email = email.get()!!
@@ -142,7 +141,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
     }
 
     private fun openMainActivity() {
-        val intent = Intent(navigator?.getContext(), MainActivity::class.java).putExtra("uid", firebaseAuth.currentUser?.uid.toString())
+        val intent = Intent(navigator?.getContext(), MainActivity::class.java)
         navigator?.openActivity(intent, true)
     }
 }

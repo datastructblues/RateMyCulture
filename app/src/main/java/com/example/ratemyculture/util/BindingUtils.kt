@@ -1,4 +1,4 @@
-package com.example.ratemyculture.core.utils
+package com.example.ratemyculture.util
 
 
 

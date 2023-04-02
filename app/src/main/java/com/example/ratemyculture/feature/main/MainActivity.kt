@@ -12,6 +12,7 @@ import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.databinding.ActivityMainBinding
 import com.example.ratemyculture.feature.main.maps.MapsFragment
 import com.example.ratemyculture.feature.main.profile.ProfileFragment
+import com.example.ratemyculture.util.firebaseAuth
 import com.example.ratemyculture.util.onNavigationButtonClicked
 
 
@@ -41,6 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainVM>(),BaseNavigator {
 
     private fun startProfileActivity(){
         val profileFragment = ProfileFragment()
+        sendDataToProfileFragment(profileFragment)
         supportFragmentManager.beginTransaction()
             .replace(R.id.center, profileFragment)
             .commit()
@@ -51,5 +53,9 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainVM>(),BaseNavigator {
             onNavigationButtonClicked(menuItem)
         }
     }
-
+    private fun sendDataToProfileFragment(fragment: ProfileFragment){
+        val bundle = Bundle()
+        bundle.putString("uid",viewModel.uid.get())
+        fragment.arguments = bundle
+    }
 }
