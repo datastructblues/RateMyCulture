@@ -21,6 +21,10 @@ class MapsFragment : Fragment() {
     }
     private val viewModel: MapFragmentVM by viewModels()
 
+    companion object{
+        val TAG = "MapsFragment"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

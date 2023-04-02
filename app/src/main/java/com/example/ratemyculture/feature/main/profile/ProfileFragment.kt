@@ -16,6 +16,9 @@ class ProfileFragment : Fragment() {
     private val viewModel by lazy {
         ProfileFragmentVM()
     }
+    companion object{
+        val TAG = "ProfileFragment"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
