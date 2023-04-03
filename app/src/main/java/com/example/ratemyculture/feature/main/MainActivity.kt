@@ -40,22 +40,25 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainVM>(),BaseNavigator {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun startProfileActivity(){
+    private fun startProfileActivity() {
         val profileFragment = ProfileFragment()
-        sendDataToProfileFragment(profileFragment)
+        //    sendDataToProfileFragment(profileFragment)
         supportFragmentManager.beginTransaction()
             .replace(R.id.center, profileFragment)
             .commit()
     }
 
-    private fun onNavigationClicks(){
-        mBinding?.bottomNavigation?.setOnNavigationItemSelectedListener {menuItem ->
+    private fun onNavigationClicks() {
+        mBinding?.bottomNavigation?.setOnNavigationItemSelectedListener { menuItem ->
             onNavigationButtonClicked(menuItem)
         }
     }
+
+    /*
     private fun sendDataToProfileFragment(fragment: ProfileFragment){
         val bundle = Bundle()
         bundle.putString("uid",viewModel.uid.get())
         fragment.arguments = bundle
-    }
+
+     */
 }

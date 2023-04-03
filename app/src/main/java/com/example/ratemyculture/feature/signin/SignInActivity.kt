@@ -8,7 +8,6 @@ import com.example.ratemyculture.R
 import com.example.ratemyculture.core.base.BaseActivity
 import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.databinding.ActivitySignInBinding
-import com.example.ratemyculture.feature.profile.ProfileActivity
 
 
 class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavigator {

@@ -6,7 +6,7 @@ import com.example.ratemyculture.R
 import com.example.ratemyculture.core.base.BaseActivity
 import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.databinding.ActivityProfileBinding
-
+/*
 class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileVM>(), BaseNavigator {
 
     override val bindingVariable: Int
@@ -27,3 +27,5 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileVM>(), BaseN
     private fun getIntentData():String{
         return intent.getStringExtra("uid").toString()}
 }
+
+ */

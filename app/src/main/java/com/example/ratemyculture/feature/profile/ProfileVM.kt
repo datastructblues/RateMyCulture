@@ -8,6 +8,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
+/*
 class ProfileVM : BaseViewModel<BaseNavigator>() {
 
     private val fbDatabase by lazy { Firebase.firestore }
@@ -61,3 +62,5 @@ class ProfileVM : BaseViewModel<BaseNavigator>() {
         }
     }
 }
+
+ */
