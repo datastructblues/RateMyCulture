@@ -11,7 +11,7 @@ import com.example.ratemyculture.feature.main.profile.ProfileFragment
 
 fun MainActivity.onNavigationButtonClicked(item:MenuItem):Boolean{
     val profileFragment = ProfileFragment()
-    val mapsFragment = MapsFragment()
+    val mapsFragment = com.example.ratemyculture.feature.main.maps.MapsFragment()
     return when(item.itemId){
         R.id.profile -> {
             if (supportFragmentManager.findFragmentById(R.id.center) is ProfileFragment){
@@ -23,7 +23,7 @@ fun MainActivity.onNavigationButtonClicked(item:MenuItem):Boolean{
             true
         }
         R.id.maps -> {
-            if(supportFragmentManager.findFragmentById(R.id.center) is MapsFragment){
+            if(supportFragmentManager.findFragmentById(R.id.center) is com.example.ratemyculture.feature.main.maps.MapsFragment){
                 return false
             }
             supportFragmentManager.beginTransaction()

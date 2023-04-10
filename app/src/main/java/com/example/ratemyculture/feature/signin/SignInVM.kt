@@ -109,6 +109,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
                                     firebaseAuth.currentUser?.photoUrl.toString()
                                 )
                             )
+                        Log.d(TAG, "firebaseAuthWithGoogle: " + firebaseAuth.currentUser?.uid.toString())
                     }
                     val user = FirebaseAuth.getInstance().currentUser
                     openMainActivity()
@@ -119,6 +120,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
                         getLocalizedString(R.string.retry),
                         getLocalizedString(R.string.ok)
                     ) { dialog, _ -> dialog.dismiss() }
+                    Log.d(TAG, "onActivityResult: " + task.exception.toString())
                 }
             }
     }
@@ -133,6 +135,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
         mGoogleSignInClient =
             navigator?.getContext()
                 ?.let { GoogleSignIn.getClient(it, gso) }!!
+    Log.d(TAG, "init: $mGoogleSignInClient")
     }
 //signout
     fun cleanUp() {

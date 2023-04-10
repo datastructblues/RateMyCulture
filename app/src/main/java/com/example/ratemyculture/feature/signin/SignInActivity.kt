@@ -2,6 +2,7 @@ package com.example.ratemyculture.feature.signin
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import com.example.ratemyculture.BR
 import com.example.ratemyculture.R

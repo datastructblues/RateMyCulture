@@ -1,19 +1,17 @@
 package com.example.ratemyculture.feature.main
 
-import androidx.appcompat.app.AppCompatActivity
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
-import androidx.core.view.GravityCompat
 import androidx.databinding.library.baseAdapters.BR
 import com.example.ratemyculture.R
 import com.example.ratemyculture.core.base.BaseActivity
 import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.databinding.ActivityMainBinding
-import com.example.ratemyculture.feature.main.maps.MapsFragment
 import com.example.ratemyculture.feature.main.profile.ProfileFragment
-import com.example.ratemyculture.util.firebaseAuth
 import com.example.ratemyculture.util.onNavigationButtonClicked
+import com.google.android.gms.maps.GoogleMap
 
 
 class MainActivity : BaseActivity<ActivityMainBinding,MainVM>(),BaseNavigator {
@@ -24,6 +22,7 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainVM>(),BaseNavigator {
     override val viewModel: MainVM = MainVM()
 
     private var mBinding: ActivityMainBinding? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,4 +60,5 @@ class MainActivity : BaseActivity<ActivityMainBinding,MainVM>(),BaseNavigator {
         fragment.arguments = bundle
 
      */
+
 }
