@@ -1,5 +1,6 @@
 package com.example.ratemyculture.feature.main.profile
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.ratemyculture.R
@@ -27,13 +29,21 @@ class ProfileFragment : Fragment() {
         val TAG = "ProfileFragment"
     }
 
-    private var uid: String? = null
+   private val currentUserId = firebaseAuth.currentUser?.uid
 
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // Callback is invoked after the user selects a media item or closes the
             // photo picker.
             if (uri != null) {
                 Log.d("PhotoPicker", "Selected URI: $uri")
+                val imageView = requireView().findViewById<CircleImageView>(R.id.profile_image)
+                imageView.setImageURI(uri)
+                val bitmap = imageView.drawable.toBitmap()
+
+                viewModel.uploadUserPictureToStorage(currentUserId, bitmap,requireContext())
+
+              //todo  viewModel.updateCurrentUserProfilePicture()
+
             } else {
                 Log.d("PhotoPicker", "No media selected")
             }
@@ -61,9 +71,9 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        firebaseAuth.currentUser?.let {
+        currentUserId?.let {
             viewModel.getCurrentUserProfileData(
-                it.uid,
+                it,
                 requireContext()
             )
         }
