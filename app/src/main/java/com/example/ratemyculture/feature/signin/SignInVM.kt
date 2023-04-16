@@ -93,11 +93,9 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
                             .document(firebaseAuth.currentUser?.uid.toString())
                             .set(
                                 User(
-                                    firebaseAuth.currentUser?.email.toString(),
                                     firebaseAuth.currentUser?.displayName.toString(),
-                                    null,
                                     0,
-                                    firebaseAuth.currentUser?.photoUrl.toString()
+                                    null,
                                 )
                             )
                         Log.d(TAG, "firebaseAuthWithGoogle: " + firebaseAuth.currentUser?.uid.toString())
