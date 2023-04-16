@@ -1,6 +1,10 @@
 package com.example.ratemyculture.util
 
+import android.util.Log
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.ratemyculture.R
 import com.example.ratemyculture.feature.main.MainActivity
@@ -88,10 +92,11 @@ fun MainActivity.onNavigationButtonClicked(item: MenuItem): Boolean {
     }
 }
 
-fun ProfileFragment.onMenuButtonClicked(item: MenuItem): Boolean {
+fun ProfileFragment.onMenuButtonClicked(item: MenuItem, pickMedia:ActivityResultLauncher<PickVisualMediaRequest>): Boolean {
     return when (item.itemId) {
         R.id.action_add -> {
-            //todo add
+            //update profile picture
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             true
         }R.id.action_take -> {
             //todo take
