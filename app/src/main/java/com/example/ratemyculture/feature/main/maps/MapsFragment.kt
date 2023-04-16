@@ -169,7 +169,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                     //todo distance şimdilik 1000 sonra değiştirirsin.
                     if (distance[0] < 1000) {
                         val builder = AlertDialog.Builder(requireContext())
-                        builder.setMessage("Do you want to check-in here?")
+                        builder.setMessage("Do you want to check-in [${clickedMarker.title}] here?")
                             .setCancelable(false)
                             .setPositiveButton("Yes") { _, _ ->
                                 // şu konumda checkin yapıldı longitude ve latitude bilgileri ile ve places name ile
