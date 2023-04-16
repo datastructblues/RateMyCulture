@@ -15,8 +15,10 @@ import de.hdodenhof.circleimageview.CircleImageView
 
 @BindingAdapter("app:src")
 fun setImageUri(imageView: CircleImageView, url: String?) {
-    if (url != null) {
+    if (url != "null") {
         Picasso.get().load(url).into(imageView)
+    }else{
+        imageView.setImageResource(R.drawable.baseline_person)
     }
 }
 
