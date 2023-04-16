@@ -16,6 +16,10 @@ import com.example.ratemyculture.R
 import com.example.ratemyculture.data.model.place.Place
 import com.example.ratemyculture.data.model.place.PlacesReader
 import com.example.ratemyculture.util.drawableToBitmapDescriptor
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -36,6 +40,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         val TAG = "com.example.ratemyculture.feature.main.maps.MapsFragment"
         const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,6 +68,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             addMyLocationMarker()
+            startLocationUpdates()
         } else {
             requestLocationPermission()
         }
@@ -68,7 +76,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun addMyLocationMarker() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
@@ -91,7 +99,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             if (location != null) {
                 val latLng = LatLng(location.latitude, location.longitude)
                 googleMap.isMyLocationEnabled = true
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
             }
         }
     }
@@ -127,5 +135,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 addMyLocationMarker()
             }
         }
+    }
+
+    private fun startLocationUpdates() {
+        // update users location every 10 seconds
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                p0 ?: return
+                for (location in p0.locations){
+                    val latLng = LatLng(location.latitude, location.longitude)
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
+                }
+                }
+            }
     }
 }
