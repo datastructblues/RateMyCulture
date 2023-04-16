@@ -8,7 +8,7 @@
     <string name="name_hint">Username</string>
     <string name="confirm_password_hint">Confirm Password </string>
     <string name="login">LOGIN</string>
-    <string name="forgot_password">Forgot your password?</string>
+    <string name="forgot_password"><u>Forgot your password?</u></string>
     <string name="connect_with">or connect with</string>
     <string name="account_question">Don\'t have account?</string>
     <string name="sign_in_with">Sign in with</string>

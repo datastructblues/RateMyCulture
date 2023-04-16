@@ -138,4 +138,31 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
         val intent = Intent(navigator?.getContext(), MainActivity::class.java)
         navigator?.openActivity(intent, true)
     }
+    fun forgotPassword(){
+        val email = email.get()!!
+        if (email.isEmpty()) {
+            navigator?.showAlert(
+                getLocalizedString(R.string.error_title),
+                getLocalizedString(R.string.error_message_login),
+                getLocalizedString(R.string.ok)
+            ) { dialog, _ -> dialog.dismiss() }
+        } else {
+            firebaseAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        navigator?.showAlert(
+                            getLocalizedString(R.string.ok),
+                            getLocalizedString(R.string.ok),
+                            getLocalizedString(R.string.ok)
+                        ) { dialog, _ -> dialog.dismiss() }
+                    } else {
+                        navigator?.showAlert(
+                            getLocalizedString(R.string.error_message_sign_up),
+                            getLocalizedString(R.string.retry),
+                            getLocalizedString(R.string.ok)
+                        ) { dialog, _ -> dialog.dismiss() }
+                    }
+                }
+        }
+    }
 }

@@ -83,6 +83,7 @@
             android:text="@string/forgot_password"
             android:textColor="@color/white"
             android:textSize="12sp"
+            android:onClick="@{() -> viewModel.forgotPassword()}"
             app:layout_constraintBottom_toTopOf="@+id/connectWith"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
