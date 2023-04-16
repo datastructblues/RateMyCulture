@@ -8,7 +8,7 @@ import androidx.databinding.ObservableField
 import com.example.ratemyculture.R
 import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.core.base.BaseViewModel
-import com.example.ratemyculture.data.authentication.model.GoogleUser
+import com.example.ratemyculture.data.authentication.model.User
 import com.example.ratemyculture.feature.main.MainActivity
 import com.example.ratemyculture.feature.signup.SignUpActivity
 import com.example.ratemyculture.util.fbDatabase
@@ -20,9 +20,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 
 class SignInVM : BaseViewModel<BaseNavigator>() {
@@ -45,14 +42,7 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        navigator?.getContext()
-                            ?.let {
-                                navigator?.showToast(
-                                    it,
-                                    getLocalizedString(R.string.sign_in_successful),
-                                    false
-                                )
-                            }
+                        openMainActivity()
                     } else {
                         navigator?.showAlert(
                             getLocalizedString(R.string.error_message_sign_up),
@@ -99,12 +89,13 @@ class SignInVM : BaseViewModel<BaseNavigator>() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     if (task.result?.additionalUserInfo?.isNewUser == true) {
-                        fbDatabase.collection("googleUsers")
+                        fbDatabase.collection("users")
                             .document(firebaseAuth.currentUser?.uid.toString())
                             .set(
-                                GoogleUser(
+                                User(
                                     firebaseAuth.currentUser?.email.toString(),
                                     firebaseAuth.currentUser?.displayName.toString(),
+                                    null,
                                     0,
                                     firebaseAuth.currentUser?.photoUrl.toString()
                                 )

@@ -40,7 +40,7 @@ class ProfileFragment : Fragment() {
                 imageView.setImageURI(uri)
                 val bitmap = imageView.drawable.toBitmap()
 
-                viewModel.uploadUserPictureToStorage(currentUserId, bitmap,requireContext())
+                viewModel.uploadUserPictureToStorage(currentUserId, bitmap)
 
               //todo  viewModel.updateCurrentUserProfilePicture()
 

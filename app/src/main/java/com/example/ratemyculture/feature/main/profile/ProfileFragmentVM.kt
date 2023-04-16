@@ -26,11 +26,12 @@ class ProfileFragmentVM: ViewModel(){
 
     fun getCurrentUserProfileData(uid:String,context: Context) {
         uid.let {
-            val userData = fbDatabase.collection("googleUsers").document(uid)
+            val userData = fbDatabase.collection("users").document(uid)
             userData.get().addOnSuccessListener { document ->
                 if (document != null) {
                     val username = document.get("username").toString()
                     val email = document.get("email").toString()
+                    val password = document.get("password").toString()
                     val point = document.get("point").toString()
                     val photoUrl = document.get("photo_url").toString()
                     this.username.set(username)
@@ -53,19 +54,12 @@ class ProfileFragmentVM: ViewModel(){
             }
         }
     }
-    private fun updateCurrentUserProfilePicture(uid:String, photoUrl:Uri, context: Context){
-            val userData = fbDatabase.collection("googleUsers").document(uid)
+    private fun updateCurrentUserProfilePicture(uid:String, photoUrl:Uri){
+            val userData = fbDatabase.collection("users").document(uid)
             userData.get().addOnSuccessListener { document ->
                 if (document != null) {
                     //set document field
                     userData.update("photo_url", photoUrl.toString())
-                    context.let { context ->
-                        Toast.makeText(
-                            context,
-                            "Username: $username, Email: $email, Point: $point, PhotoUrl: $photoUrl",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
                 } else {
                     println("No such document")
                 }
@@ -73,7 +67,7 @@ class ProfileFragmentVM: ViewModel(){
             }
     }
 
-    fun uploadUserPictureToStorage(uid:String?, bitmap: Bitmap,context: Context){
+    fun uploadUserPictureToStorage(uid:String?, bitmap: Bitmap){
         /*
         val storageRef = fbStorage.reference
         val profilePictureRef = storageRef.child("profile_pictures/${firebaseAuth.currentUser?.uid}.jpg")
@@ -109,7 +103,7 @@ class ProfileFragmentVM: ViewModel(){
                 Log.d("ProfileFragmentVM", "uploadUserPictureToStorage: $uri")
                 Log.d("ProfileFragmentVM", uid.toString())
                 if (uid != null) {
-                    updateCurrentUserProfilePicture(uid,uri, context)
+                    updateCurrentUserProfilePicture(uid,uri)
                 }
             }
         }
