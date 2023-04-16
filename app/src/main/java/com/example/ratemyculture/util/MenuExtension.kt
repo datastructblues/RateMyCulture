@@ -87,3 +87,18 @@ fun MainActivity.onNavigationButtonClicked(item: MenuItem): Boolean {
         else -> false
     }
 }
+
+fun ProfileFragment.onMenuButtonClicked(item: MenuItem): Boolean {
+    return when (item.itemId) {
+        R.id.action_add -> {
+            //todo add
+            true
+        }R.id.action_take -> {
+            //todo take
+            true
+        }R.id.action_delete -> {
+            //todo delete
+            true
+        }else -> false
+    }
+}

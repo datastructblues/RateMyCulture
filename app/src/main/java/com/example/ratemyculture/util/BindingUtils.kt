@@ -8,6 +8,7 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
+import com.example.ratemyculture.R
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -25,6 +26,7 @@ fun setImageBitmap(imageView: AppCompatImageView, bitmap: Bitmap?) {
         imageView.setImageBitmap(bitmap)
     }
 }
+
 
 
 
