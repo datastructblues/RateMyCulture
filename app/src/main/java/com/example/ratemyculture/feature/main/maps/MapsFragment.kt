@@ -160,10 +160,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private fun computeDistanceOfUserAndMarker(){
         googleMap.setOnMarkerClickListener { clickedMarker ->
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                clickedMarker.showInfoWindow()
                 val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
                 fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
                     val userLatLng = LatLng(location.latitude, location.longitude)
                     val distance = FloatArray(1)
+                    println("marker: ${clickedMarker.position}")
+                    println("user: $userLatLng")
                     Location.distanceBetween(userLatLng.latitude, userLatLng.longitude, clickedMarker.position.latitude, clickedMarker.position.longitude, distance)
 
                     //todo distance şimdilik 1000 sonra değiştirirsin.
