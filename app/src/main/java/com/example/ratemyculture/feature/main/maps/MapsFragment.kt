@@ -1,8 +1,10 @@
 package com.example.ratemyculture.feature.main.maps
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -73,6 +75,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             requestLocationPermission()
         }
         addMarkers()
+        listenMarkers()
     }
 
     private fun addMyLocationMarker() {
@@ -149,4 +152,39 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 }
             }
     }
+
+    private fun listenMarkers(){
+       computeDistanceOfUserAndMarker()
+    }
+
+    private fun computeDistanceOfUserAndMarker(){
+        googleMap.setOnMarkerClickListener { clickedMarker ->
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+                fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+                    val userLatLng = LatLng(location.latitude, location.longitude)
+                    val distance = FloatArray(1)
+                    Location.distanceBetween(userLatLng.latitude, userLatLng.longitude, clickedMarker.position.latitude, clickedMarker.position.longitude, distance)
+
+                    //todo distance şimdilik 1000 sonra değiştirirsin.
+                    if (distance[0] < 1000) {
+                        val builder = AlertDialog.Builder(requireContext())
+                        builder.setMessage("Do you want to check-in here?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes") { _, _ ->
+                                // şu konumda checkin yapıldı longitude ve latitude bilgileri ile ve places name ile
+                              //  viewModel.checkIn(clickedMarker.position.latitude, clickedMarker.position.longitude)
+                                println("checkin: ${clickedMarker.title}")
+                            }
+                            .setNegativeButton("No") { dialog, _ -> dialog.cancel() }
+                        val alert = builder.create()
+                        alert.show()
+                    }
+                }
+            }
+            clickedMarker.tag = 1
+            true
+        }
+    }
+
 }
