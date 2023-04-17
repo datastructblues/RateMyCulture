@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">RateMyCulture</string>
     <string name="sign_in">Sign In </string>
     <string name="sign_up"><u>Sign up</u> </string>
     <string name="sign_up_title">Sign up</string>
@@ -31,4 +30,5 @@
     <string name="choose_image_from_gallery">Choose image from gallery</string>
     <string name="take_photo">Take photo</string>
     <string name="delete_photo">Delete photo</string>
+    <string name="sign_out">Sign out</string>
 </resources>

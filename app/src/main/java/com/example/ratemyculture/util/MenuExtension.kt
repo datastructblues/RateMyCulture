@@ -1,5 +1,6 @@
 package com.example.ratemyculture.util
 
+import android.content.Intent
 import android.util.Log
 import android.view.MenuItem
 import androidx.activity.result.ActivityResultLauncher
@@ -10,6 +11,7 @@ import com.example.ratemyculture.R
 import com.example.ratemyculture.feature.main.MainActivity
 import com.example.ratemyculture.feature.main.maps.MapsFragment
 import com.example.ratemyculture.feature.main.profile.ProfileFragment
+import com.example.ratemyculture.feature.signin.SignInActivity
 
 /*
 
@@ -75,6 +77,7 @@ fun MainActivity.onNavigationButtonClicked(item: MenuItem): Boolean {
             activeFragment = profileFragment
             true
         }
+
         R.id.maps -> {
             if (activeFragment == mapsFragment) {
                 return false
@@ -88,22 +91,45 @@ fun MainActivity.onNavigationButtonClicked(item: MenuItem): Boolean {
             activeFragment = mapsFragment
             true
         }
+
         else -> false
     }
 }
 
-fun ProfileFragment.onMenuButtonClicked(item: MenuItem, pickMedia:ActivityResultLauncher<PickVisualMediaRequest>): Boolean {
+fun ProfileFragment.onMenuButtonClicked(
+    item: MenuItem,
+    pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+): Boolean {
     return when (item.itemId) {
         R.id.action_add -> {
             //update profile picture
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             true
-        }R.id.action_take -> {
+        }
+
+        R.id.action_take -> {
             //todo take
             true
-        }R.id.action_delete -> {
+        }
+
+        R.id.action_delete -> {
             //todo delete
             true
-        }else -> false
+        }
+
+        else -> false
+    }
+}
+
+fun ProfileFragment.onProfileMenuClicked(item: MenuItem, signInLauncher: ActivityResultLauncher<Intent>): Boolean {
+    return when (item.itemId) {
+        R.id.sign_out -> {
+            firebaseAuth.signOut()
+            Log.d("ProfileFragment", "User signed out")
+            //todo navigate to login
+            signInLauncher.launch(Intent(requireContext(), SignInActivity::class.java))
+            true
+        }
+        else -> false
     }
 }

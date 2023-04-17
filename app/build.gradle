@@ -24,10 +24,12 @@ android {
 
     buildTypes {
         release {
+            manifestPlaceholders = [app_name: "Project Culture"]
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug{
+            manifestPlaceholders = [app_name: "Project Culture"]
             debuggable true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

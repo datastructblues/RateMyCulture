@@ -60,6 +60,6 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
     // onDestroy metodu, gereksiz nesnelerin temizlenmesi
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.cleanUp()
+    // todo bu kod yuzunden kullanıcı datalarını kaybediyordun viewModel.cleanUp()
     }
 }

@@ -8,6 +8,11 @@
             type="com.example.ratemyculture.feature.main.profile.ProfileFragmentVM" />
     </data>
 
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -43,6 +48,21 @@
 
         </androidx.appcompat.widget.AppCompatImageView>
 
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/profile_menu"
+            android:layout_width="35dp"
+            android:layout_height="80dp"
+            android:background="@color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.957"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.001" />
+
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/materialTextView"
             android:layout_width="wrap_content"
@@ -62,5 +82,23 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:background="@color/app_bg"
+            android:layout_gravity="end"
+            app:headerLayout="@layout/nav_header"
+            app:menu="@menu/profile_drawer_menu">
+
+            <!-- Your navigation menu items here -->
+
+            <include
+                android:id="@+id/nav_header"
+                layout="@layout/nav_header"/>
+
+        </com.google.android.material.navigation.NavigationView>
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </layout>

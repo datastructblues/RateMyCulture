@@ -1,5 +1,6 @@
 package com.example.ratemyculture.feature.main.profile
 
+import android.app.Activity.RESULT_OK
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
@@ -10,12 +11,14 @@ import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.ratemyculture.R
 import com.example.ratemyculture.databinding.FragmentProfileBinding
 import com.example.ratemyculture.util.firebaseAuth
 import com.example.ratemyculture.util.onMenuButtonClicked
+import com.example.ratemyculture.util.onProfileMenuClicked
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ProfileFragment : Fragment() {
@@ -30,6 +33,7 @@ class ProfileFragment : Fragment() {
     }
 
    private val currentUserId = firebaseAuth.currentUser?.uid
+    private lateinit var binding :FragmentProfileBinding
 
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             // Callback is invoked after the user selects a media item or closes the
@@ -49,6 +53,16 @@ class ProfileFragment : Fragment() {
             }
         }
 
+    val signInActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // There are no request codes
+            val data = result.data
+            startActivity(data)
+            requireActivity().finish()
+            // Handle the Intent
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         println("ProfileFragment.onCreate")
@@ -62,7 +76,7 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         println("ProfileFragment.onCreateView")
         //inflate data binding
-        val binding = DataBindingUtil.inflate<FragmentProfileBinding>(
+        binding = DataBindingUtil.inflate<FragmentProfileBinding>(
             inflater, R.layout.fragment_profile, container, false
         )
         binding.viewModel = viewModel
@@ -78,6 +92,7 @@ class ProfileFragment : Fragment() {
             )
         }
         openDropdown()
+        openProfileDrawerMenu()
     }
 
      private fun openDropdown() {
@@ -97,6 +112,18 @@ class ProfileFragment : Fragment() {
                 onMenuButtonClicked(menuItem,pickMedia)
             }
             popupMenu.show()
+        }
+    }
+
+    private fun openProfileDrawerMenu(){
+        binding.profileMenu.setOnClickListener {
+            binding.drawerLayout.openDrawer(GravityCompat.END)
+            binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+                onProfileMenuClicked(menuItem, signInActivityLauncher)
+            }
+            binding.navHeader.close.setOnClickListener {
+                binding.drawerLayout.closeDrawer(GravityCompat.END)
+            }
         }
     }
 }
