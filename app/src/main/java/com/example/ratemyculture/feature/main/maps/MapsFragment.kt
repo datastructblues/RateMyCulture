@@ -10,8 +10,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.ratemyculture.R
@@ -176,8 +178,16 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                             .setCancelable(false)
                             .setPositiveButton("Yes") { _, _ ->
                                 // şu konumda checkin yapıldı longitude ve latitude bilgileri ile ve places name ile
-                              //  viewModel.checkIn(clickedMarker.position.latitude, clickedMarker.position.longitude)
+                                viewModel.updateUserPoint()
+
+                                viewModel.userPoints.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+                                    override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                                        Toast.makeText(requireContext(),"Point increased! New point: ${viewModel.userPoints.get()}",Toast.LENGTH_SHORT).show()
+                                    }
+                                })
+
                                 println("checkin: ${clickedMarker.title}")
+                              //  viewModel.checkIn(clickedMarker.position.latitude, clickedMarker.position.longitude)
                             }
                             .setNegativeButton("No") { dialog, _ -> dialog.cancel() }
                         val alert = builder.create()
@@ -189,5 +199,4 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             true
         }
     }
-
 }
