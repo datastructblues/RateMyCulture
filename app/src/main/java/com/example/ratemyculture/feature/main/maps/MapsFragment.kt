@@ -1,16 +1,23 @@
 package com.example.ratemyculture.feature.main.maps
 
 import android.Manifest
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.text.SimpleDateFormat
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.Observable
@@ -19,7 +26,9 @@ import androidx.fragment.app.viewModels
 import com.example.ratemyculture.R
 import com.example.ratemyculture.data.model.place.Place
 import com.example.ratemyculture.data.model.place.PlacesReader
+import com.example.ratemyculture.feature.upload.UploadActivity
 import com.example.ratemyculture.util.drawableToBitmapDescriptor
+import com.example.ratemyculture.util.openAppSystemSettings
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -31,6 +40,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import java.io.File
+import java.io.IOException
+import java.util.Date
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -46,6 +58,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+
+
+    private val openCamera= registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+
+        }
+    }
 
 
     override fun onCreateView(
@@ -179,6 +198,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                 .setCancelable(false)
                                 .setPositiveButton("Yes") { _, _ ->
                                     // şu konumda checkin yapıldı longitude ve latitude bilgileri ile ve places name ile
+
+                                    //todo dont update userpoint for now
+                                    /*
                                     viewModel.updateUserPoint()
 
                                     viewModel.userPoints.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
@@ -186,6 +208,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                             Toast.makeText(requireContext(),"Point increased! New point: ${viewModel.userPoints.get()}",Toast.LENGTH_SHORT).show()
                                         }
                                     })
+
+                                     */
+
+                                    openCamera()
 
                                     println("checkin: ${clickedMarker.title}")
                                     //  viewModel.checkIn(clickedMarker.position.latitude, clickedMarker.position.longitude)
@@ -201,6 +227,55 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             }
             clickedMarker.tag = 1
             true
+        }
+    }
+
+    private fun openCamera() {
+        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            context?.openAppSystemSettings()
+        }else{
+           dispatchTakePictureIntent()
+        }
+    }
+
+
+    val REQUEST_IMAGE_CAPTURE = 1
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE).also {
+                createImageFile()
+            }
+        } catch (e: ActivityNotFoundException) {
+            // display error state to the user
+        }
+    }
+    lateinit var currentPhotoPath: String
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? = context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            // The photo was taken and saved to the file specified in the Intent, so you can now upload it to your server or do whatever you want with it.
+            val imageFile = File(currentPhotoPath)
+            // Pass the imageFile to your upload activity
+            val uploadIntent = Intent(context, UploadActivity::class.java)
+            uploadIntent.putExtra("imageFile", imageFile)
+            startActivity(uploadIntent)
         }
     }
 }

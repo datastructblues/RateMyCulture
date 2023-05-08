@@ -1,12 +1,15 @@
 package com.example.ratemyculture.feature.main.maps
 
+import android.net.Uri
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.example.ratemyculture.util.fbDatabase
+import com.example.ratemyculture.util.fbStorage
 import com.example.ratemyculture.util.firebaseAuth
 import com.example.ratemyculture.util.getDocument
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
+import java.io.File
 
 class MapFragmentVM : ViewModel() {
 
@@ -27,5 +30,20 @@ class MapFragmentVM : ViewModel() {
             }
         }.addOnFailureListener { exception ->
         }
+    }
+
+    fun createImageFile(): Uri? {
+        val storageRef = fbStorage.reference
+        val imageRef = storageRef.child("images/${firebaseAuth.currentUser?.uid.toString()}")
+        val file = File.createTempFile("images", "jpg")
+        val uri = Uri.fromFile(file)
+        val uploadTask = imageRef.putFile(uri)
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+        }.addOnSuccessListener {
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            // ...
+        }
+        return uri
     }
 }
