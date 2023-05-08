@@ -10,7 +10,10 @@ import java.io.File
 
 class UploadVM: BaseViewModel<BaseNavigator>() {
 
-    fun createImageFile(): Uri? {
+
+    fun uploadImageFile(): Uri? {
+
+        /*
         val storageRef = fbStorage.reference
         val imageRef = storageRef.child("images/${firebaseAuth.currentUser?.uid.toString()}")
         val file = File.createTempFile("images", "jpg")
@@ -23,5 +26,11 @@ class UploadVM: BaseViewModel<BaseNavigator>() {
             // ...
         }
         return uri
+         */
+        return null
+    }
+
+    fun backToMainActivity(){
+        navigator?.finishActivity()
     }
 }

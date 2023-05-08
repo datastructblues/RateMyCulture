@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.location.Location
 import android.location.LocationManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -20,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.databinding.Observable
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -242,13 +244,25 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     val REQUEST_IMAGE_CAPTURE = 1
 
     private fun dispatchTakePictureIntent() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE).also {
-                createImageFile()
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(requireContext().packageManager).also {
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    // Error occurred while creating the File
+                    //TODO: handle error
+                    null
+                }
+                photoFile?.also {
+                    val photoURI: Uri = FileProvider.getUriForFile(
+                        requireContext(),
+                        requireContext().packageName + ".fileprovider",
+                        it
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                   startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                }
             }
-        } catch (e: ActivityNotFoundException) {
-            // display error state to the user
         }
     }
     lateinit var currentPhotoPath: String

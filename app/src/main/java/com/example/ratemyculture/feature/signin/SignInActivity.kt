@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.StatFs
 import android.util.Log
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
@@ -36,6 +38,9 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
     private val PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.MANAGE_EXTERNAL_STORAGE,
         Manifest.permission.ACCESS_BACKGROUND_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
@@ -44,9 +49,15 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
         super.onCreate(savedInstanceState)
         mBinding = super.viewDataBinding
         viewModel.navigator = this
+        FirebaseApp.initializeApp(this)
         viewModel.init()
-        FirebaseApp.initializeApp(this);
-     //   verifyPermissions()
+        verifyPermissions()
+        val path = Environment.getExternalStorageDirectory().absolutePath
+        val stat = StatFs(path)
+        val bytesAvailable = stat.availableBytes
+        val megabytesAvailable = bytesAvailable / (1024 * 1024)
+
+        Log.d("TAG", "Free space: $megabytesAvailable MB")
     }
 
     fun signInWithGoogle(view: View) {
