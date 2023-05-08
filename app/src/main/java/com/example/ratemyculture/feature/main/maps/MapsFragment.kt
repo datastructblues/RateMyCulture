@@ -62,6 +62,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             R.id.map_fragment
         ) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -165,33 +166,36 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 clickedMarker.showInfoWindow()
                 val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
                 fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                    val userLatLng = LatLng(location.latitude, location.longitude)
-                    val distance = FloatArray(1)
-                    println("marker: ${clickedMarker.position}")
-                    println("user: $userLatLng")
-                    Location.distanceBetween(userLatLng.latitude, userLatLng.longitude, clickedMarker.position.latitude, clickedMarker.position.longitude, distance)
+                    if (location != null){
+                        val userLatLng = LatLng(location.latitude, location.longitude)
+                        val distance = FloatArray(1)
+                        println("marker: ${clickedMarker.position}")
+                        println("user: $userLatLng")
+                        Location.distanceBetween(userLatLng.latitude, userLatLng.longitude, clickedMarker.position.latitude, clickedMarker.position.longitude, distance)
+                        //todo distance şimdilik 1000 sonra değiştirirsin.
+                        if (distance[0] < 1000) {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setMessage("Do you want to check-in [${clickedMarker.title}] here?")
+                                .setCancelable(false)
+                                .setPositiveButton("Yes") { _, _ ->
+                                    // şu konumda checkin yapıldı longitude ve latitude bilgileri ile ve places name ile
+                                    viewModel.updateUserPoint()
 
-                    //todo distance şimdilik 1000 sonra değiştirirsin.
-                    if (distance[0] < 1000) {
-                        val builder = AlertDialog.Builder(requireContext())
-                        builder.setMessage("Do you want to check-in [${clickedMarker.title}] here?")
-                            .setCancelable(false)
-                            .setPositiveButton("Yes") { _, _ ->
-                                // şu konumda checkin yapıldı longitude ve latitude bilgileri ile ve places name ile
-                                viewModel.updateUserPoint()
+                                    viewModel.userPoints.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+                                        override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                                            Toast.makeText(requireContext(),"Point increased! New point: ${viewModel.userPoints.get()}",Toast.LENGTH_SHORT).show()
+                                        }
+                                    })
 
-                                viewModel.userPoints.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
-                                    override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                                        Toast.makeText(requireContext(),"Point increased! New point: ${viewModel.userPoints.get()}",Toast.LENGTH_SHORT).show()
-                                    }
-                                })
-
-                                println("checkin: ${clickedMarker.title}")
-                              //  viewModel.checkIn(clickedMarker.position.latitude, clickedMarker.position.longitude)
-                            }
-                            .setNegativeButton("No") { dialog, _ -> dialog.cancel() }
-                        val alert = builder.create()
-                        alert.show()
+                                    println("checkin: ${clickedMarker.title}")
+                                    //  viewModel.checkIn(clickedMarker.position.latitude, clickedMarker.position.longitude)
+                                }
+                                .setNegativeButton("No") { dialog, _ -> dialog.cancel() }
+                            val alert = builder.create()
+                            alert.show()
+                        } else{
+                            Toast.makeText(requireContext(),"You are far away from the location!",Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }

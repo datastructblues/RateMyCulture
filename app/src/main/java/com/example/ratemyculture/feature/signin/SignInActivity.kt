@@ -36,6 +36,7 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
     private val PERMISSIONS = arrayOf(
         Manifest.permission.CAMERA,
         Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_BACKGROUND_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
