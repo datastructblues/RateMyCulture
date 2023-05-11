@@ -1,7 +1,7 @@
 package com.example.ratemyculture.feature.main.profile
 
+import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -34,36 +34,38 @@ class ProfileFragment : Fragment() {
         val TAG = "ProfileFragment"
     }
 
-   private val currentUserId = firebaseAuth.currentUser?.uid
-    private lateinit var binding :FragmentProfileBinding
+    private val currentUserId = firebaseAuth.currentUser?.uid
+    private lateinit var binding: FragmentProfileBinding
+    private var adapter: SharingAdapter? = null
 
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            // Callback is invoked after the user selects a media item or closes the
-            // photo picker.
-            if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: $uri")
-                val imageView = requireView().findViewById<CircleImageView>(R.id.profile_image)
-                imageView.setImageURI(uri)
-                val bitmap = imageView.drawable.toBitmap()
+        // Callback is invoked after the user selects a media item or closes the
+        // photo picker.
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: $uri")
+            val imageView = requireView().findViewById<CircleImageView>(R.id.profile_image)
+            imageView.setImageURI(uri)
+            val bitmap = imageView.drawable.toBitmap()
 
-                viewModel.uploadUserPictureToStorage(currentUserId, bitmap)
+            viewModel.uploadUserPictureToStorage(currentUserId, bitmap)
 
-              //todo  viewModel.updateCurrentUserProfilePicture()
+            //todo  viewModel.updateCurrentUserProfilePicture()
 
-            } else {
-                Log.d("PhotoPicker", "No media selected")
-            }
-        }
-
-    val signInActivityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            // There are no request codes
-            val data = result.data
-            startActivity(data)
-            requireActivity().finish()
-            // Handle the Intent
+        } else {
+            Log.d("PhotoPicker", "No media selected")
         }
     }
+
+    val signInActivityLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                // There are no request codes
+                val data = result.data
+                startActivity(data)
+                requireActivity().finish()
+                // Handle the Intent
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +87,7 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         currentUserId?.let {
@@ -95,14 +98,31 @@ class ProfileFragment : Fragment() {
         }
         openDropdown()
         openProfileDrawerMenu()
-        val itemList =  viewModel.getUserSharings()
-        val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-        val adapter = SharingAdapter(itemList)
-        recyclerView.adapter = adapter
+        initRecyclerView()
+        swipeRefresh()
     }
 
-     private fun openDropdown() {
+    /*
+        private fun initRecyclerView() {
+            val itemList =  viewModel.getUserSharings()
+            val recyclerView: RecyclerView = binding.recyclerView
+            recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+            adapter = SharingAdapter(itemList)
+            recyclerView.adapter = adapter
+        }
+
+     */
+    private fun initRecyclerView() {
+     viewModel.getUserSharings { itemList ->
+            val recyclerView: RecyclerView = binding.recyclerView
+            recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+            adapter = SharingAdapter(itemList)
+            recyclerView.adapter = adapter
+        }
+    }
+
+
+    private fun openDropdown() {
         val imageView = requireView().findViewById<ImageView>(R.id.add_profile_picture)
         imageView?.setOnClickListener {
             println("clicked!")
@@ -116,13 +136,13 @@ class ProfileFragment : Fragment() {
                 menuItem.isEnabled = false
             }
             popupMenu.setOnMenuItemClickListener { menuItem ->
-                onMenuButtonClicked(menuItem,pickMedia)
+                onMenuButtonClicked(menuItem, pickMedia)
             }
             popupMenu.show()
         }
     }
 
-    private fun openProfileDrawerMenu(){
+    private fun openProfileDrawerMenu() {
         binding.profileMenu.setOnClickListener {
             binding.drawerLayout.openDrawer(GravityCompat.END)
             binding.navigationView.setNavigationItemSelectedListener { menuItem ->
@@ -131,6 +151,16 @@ class ProfileFragment : Fragment() {
             binding.navHeader.close.setOnClickListener {
                 binding.drawerLayout.closeDrawer(GravityCompat.END)
             }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun swipeRefresh() {
+        binding.refresher.setOnRefreshListener {
+            viewModel.getUserSharings { itemList ->
+                adapter?.updateList(itemList)
+            }
+            binding.refresher.isRefreshing = false
         }
     }
 }

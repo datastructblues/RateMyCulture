@@ -54,6 +54,7 @@ class UploadVM: BaseViewModel<BaseNavigator>() {
                 getCurrentDate()
             )
         )
+
     }
 
     private fun getCurrentDate():Timestamp{

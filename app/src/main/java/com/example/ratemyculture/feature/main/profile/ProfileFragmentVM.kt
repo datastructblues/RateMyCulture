@@ -111,7 +111,7 @@ class ProfileFragmentVM : ViewModel() {
         }
     }
 
-    fun getUserSharings():MutableList<Sharing>{
+    fun getUserSharings(callback: (List<Sharing>) -> Unit):MutableList<Sharing>{
         val userId = getAuthCurrentUserUid()
         val sharingList = mutableListOf<Sharing>()
         val collectionRef = getCollection("sharings")
@@ -123,6 +123,7 @@ class ProfileFragmentVM : ViewModel() {
                 val sharing = document.toObject(Sharing::class.java)
                 sharingList.add(sharing)
             }
+            callback(sharingList)
         }.addOnFailureListener { exception ->
             // Hata durumunda burada işlem yapabilirsiniz
             println("Firestore sorgusu başarısız oldu: $exception")
