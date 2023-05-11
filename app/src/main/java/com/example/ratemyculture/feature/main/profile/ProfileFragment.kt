@@ -14,6 +14,8 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.ratemyculture.R
 import com.example.ratemyculture.databinding.FragmentProfileBinding
 import com.example.ratemyculture.util.firebaseAuth
@@ -93,6 +95,11 @@ class ProfileFragment : Fragment() {
         }
         openDropdown()
         openProfileDrawerMenu()
+        val itemList =  viewModel.getUserSharings()
+        val recyclerView: RecyclerView = binding.recyclerView
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        val adapter = SharingAdapter(itemList)
+        recyclerView.adapter = adapter
     }
 
      private fun openDropdown() {

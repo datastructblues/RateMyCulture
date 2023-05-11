@@ -5,7 +5,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.core.base.BaseViewModel
-import com.example.ratemyculture.data.model.sharings.Sharings
+import com.example.ratemyculture.data.model.sharings.Sharing
 import com.example.ratemyculture.util.fbDatabase
 import com.example.ratemyculture.util.fbStorage
 import com.example.ratemyculture.util.firebaseAuth
@@ -46,7 +46,7 @@ class UploadVM: BaseViewModel<BaseNavigator>() {
 
     private fun savePhotoToFirestore(photoUrl: String, caption: String){
         fbDatabase.collection("sharings").document().set(
-            Sharings(
+            Sharing(
                 getAuthCurrentUserUid(),
                 photoUrl,
                 caption,

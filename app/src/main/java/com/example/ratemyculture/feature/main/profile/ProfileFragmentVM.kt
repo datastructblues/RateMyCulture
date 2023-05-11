@@ -2,20 +2,21 @@ package com.example.ratemyculture.feature.main.profile
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import com.example.ratemyculture.data.model.sharings.Sharing
 import com.example.ratemyculture.util.fbDatabase
 import com.example.ratemyculture.util.fbStorage
-import com.example.ratemyculture.util.firebaseAuth
+import com.example.ratemyculture.util.getAuthCurrentUserUid
+import com.example.ratemyculture.util.getCollection
+import com.google.firebase.firestore.Query
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.net.URL
 
-class ProfileFragmentVM: ViewModel(){
+
+class ProfileFragmentVM : ViewModel() {
 
     //livedata for user profile data
     val username = ObservableField<String>()
@@ -24,7 +25,7 @@ class ProfileFragmentVM: ViewModel(){
     val photoUrl = ObservableField<String>()
 
 
-    fun getCurrentUserProfileData(uid:String,context: Context) {
+    fun getCurrentUserProfileData(uid: String, context: Context) {
         uid.let {
             val userData = fbDatabase.collection("users").document(uid)
             userData.get().addOnSuccessListener { document ->
@@ -54,20 +55,21 @@ class ProfileFragmentVM: ViewModel(){
             }
         }
     }
-    private fun updateCurrentUserProfilePicture(uid:String, photoUrl:Uri){
-            val userData = fbDatabase.collection("users").document(uid)
-            userData.get().addOnSuccessListener { document ->
-                if (document != null) {
-                    //set document field
-                    userData.update("photo_url", photoUrl.toString())
-                } else {
-                    println("No such document")
-                }
-            }.addOnFailureListener { exception ->
+
+    private fun updateCurrentUserProfilePicture(uid: String, photoUrl: Uri) {
+        val userData = fbDatabase.collection("users").document(uid)
+        userData.get().addOnSuccessListener { document ->
+            if (document != null) {
+                //set document field
+                userData.update("photo_url", photoUrl.toString())
+            } else {
+                println("No such document")
             }
+        }.addOnFailureListener { exception ->
+        }
     }
 
-    fun uploadUserPictureToStorage(uid:String?, bitmap: Bitmap){
+    fun uploadUserPictureToStorage(uid: String?, bitmap: Bitmap) {
         /*
         val storageRef = fbStorage.reference
         val profilePictureRef = storageRef.child("profile_pictures/${firebaseAuth.currentUser?.uid}.jpg")
@@ -103,9 +105,28 @@ class ProfileFragmentVM: ViewModel(){
                 Log.d("ProfileFragmentVM", "uploadUserPictureToStorage: $uri")
                 Log.d("ProfileFragmentVM", uid.toString())
                 if (uid != null) {
-                    updateCurrentUserProfilePicture(uid,uri)
+                    updateCurrentUserProfilePicture(uid, uri)
                 }
             }
         }
+    }
+
+    fun getUserSharings():MutableList<Sharing>{
+        val userId = getAuthCurrentUserUid()
+        val sharingList = mutableListOf<Sharing>()
+        val collectionRef = getCollection("sharings")
+        val query = collectionRef.whereEqualTo("userId", userId)
+            .orderBy("uploadDate", Query.Direction.DESCENDING)
+        query.get().addOnSuccessListener { documents ->
+            Log.d("ProfileFragmentVM", "getUserSharings: ${documents.size()}")
+            for (document in documents) {
+                val sharing = document.toObject(Sharing::class.java)
+                sharingList.add(sharing)
+            }
+        }.addOnFailureListener { exception ->
+            // Hata durumunda burada işlem yapabilirsiniz
+            println("Firestore sorgusu başarısız oldu: $exception")
+        }
+        return sharingList
     }
 }
