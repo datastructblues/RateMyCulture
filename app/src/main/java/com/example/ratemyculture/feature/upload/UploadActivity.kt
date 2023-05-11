@@ -43,7 +43,8 @@ class UploadActivity : BaseActivity<ActivityUploadBinding, UploadVM>(), BaseNavi
     private fun uploadImageToStorage() {
         val uploadButton = mBinding?.upload
         uploadButton?.setOnClickListener {
-            viewModel.uploadImageFile(uri)
+            val caption = mBinding?.caption?.text.toString()
+            viewModel.uploadSharing(uri,caption)
             finish()
         }
     }

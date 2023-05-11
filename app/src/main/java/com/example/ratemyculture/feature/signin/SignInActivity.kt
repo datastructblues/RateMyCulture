@@ -22,6 +22,7 @@ import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.databinding.ActivitySignInBinding
 import com.example.ratemyculture.util.openAppSystemSettings
 import com.google.firebase.FirebaseApp
+import com.google.firebase.Timestamp
 
 
 class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavigator {
@@ -56,6 +57,9 @@ class SignInActivity : BaseActivity<ActivitySignInBinding, SignInVM>(), BaseNavi
         val stat = StatFs(path)
         val bytesAvailable = stat.availableBytes
         val megabytesAvailable = bytesAvailable / (1024 * 1024)
+        val x= Timestamp.now()
+
+
 
         Log.d("TAG", "Free space: $megabytesAvailable MB")
     }
