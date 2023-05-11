@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
@@ -27,11 +28,11 @@
             android:id="@+id/profile_image"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:layout_marginTop="96dp"
+            android:layout_marginTop="100dp"
             app:civ_border_color="@color/white"
             app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.092"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:src="@{viewModel.photoUrl}">
@@ -46,13 +47,12 @@
             android:src="@drawable/add_icon"
             app:layout_constraintBottom_toBottomOf="@id/profile_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.604"
+            app:layout_constraintHorizontal_bias="0.283"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0">
 
         </androidx.appcompat.widget.AppCompatImageView>
-
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/profile_menu"
@@ -73,35 +73,37 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:spanCount="3"
-            style="@style/GridDividerStyle"
             android:scrollbars="vertical"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/materialTextView"
+            app:layout_constraintTop_toBottomOf="@id/profile_image"
+            android:layout_marginTop="25dp"
 
             />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/materialTextView"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginBottom="476dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:text="@{viewModel.username}"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="30sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/profile_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.072"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_image">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.416"
+            tools:text="Username">
 
         </com.google.android.material.textview.MaterialTextView>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation_view"
@@ -120,7 +122,6 @@
 
         </com.google.android.material.navigation.NavigationView>
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
 
 </layout>
