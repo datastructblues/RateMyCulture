@@ -13,6 +13,7 @@ import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Looper
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
@@ -60,6 +61,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
+    private lateinit var locationRequest: LocationRequest
 
 
     private val openCamera= registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -86,6 +88,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     }
 
+
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         if (ContextCompat.checkSelfPermission(
@@ -94,12 +97,21 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             addMyLocationMarker()
+            createLocationRequest()
             startLocationUpdates()
         } else {
             requestLocationPermission()
         }
         addMarkers()
         listenMarkers()
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest.create().apply {
+            interval = 10000 // Sets the desired interval for active location updates, in milliseconds.
+            fastestInterval = 5000 // Sets the fastest rate for active location updates, in milliseconds.
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
     }
 
     private fun addMyLocationMarker() {
@@ -113,22 +125,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return
         }
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null) {
-                val latLng = LatLng(location.latitude, location.longitude)
-                googleMap.isMyLocationEnabled = true
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-            }
-        }
+        googleMap.isMyLocationEnabled = true
     }
 
     private fun requestLocationPermission() {
@@ -176,6 +175,36 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 }
             }
     }
+/*
+    private fun startLocationUpdates() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                locationResult ?: return
+                locationResult.locations.forEach { location ->
+                    val latLng = LatLng(location.latitude, location.longitude)
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                }
+            }
+        }
+
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
+    }
+    */
 
     private fun listenMarkers(){
        computeDistanceOfUserAndMarker()
