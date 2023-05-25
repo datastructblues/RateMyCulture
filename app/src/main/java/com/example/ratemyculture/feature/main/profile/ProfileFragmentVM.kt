@@ -39,14 +39,9 @@ class ProfileFragmentVM : ViewModel() {
                     this.email.set(email)
                     this.point.set(point)
                     this.photoUrl.set(photoUrl)
-                    context.let { context ->
-                        Toast.makeText(
-                            context,
-                            "Username: $username, Email: $email, Point: $point, PhotoUrl: $photoUrl",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.d("ProfileFragmentVM", "getCurrentUserProfileData: $photoUrl")
-                    }
+
+                    Log.d("ProfileFragmentVM", "getCurrentUserProfileData: $photoUrl")
+
 
                 } else {
                     println("No such document")
@@ -111,7 +106,7 @@ class ProfileFragmentVM : ViewModel() {
         }
     }
 
-    fun getUserSharings(callback: (List<Sharing>) -> Unit):MutableList<Sharing>{
+    fun getUserSharings(callback: (List<Sharing>) -> Unit): MutableList<Sharing> {
         val userId = getAuthCurrentUserUid()
         val sharingList = mutableListOf<Sharing>()
         val collectionRef = getCollection("sharings")
