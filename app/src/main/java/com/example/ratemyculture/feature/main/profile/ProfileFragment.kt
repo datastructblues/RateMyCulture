@@ -17,7 +17,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ratemyculture.R
+import com.example.ratemyculture.data.model.sharings.Sharing
 import com.example.ratemyculture.databinding.FragmentProfileBinding
+import com.example.ratemyculture.feature.main.post.PostFragment
 import com.example.ratemyculture.util.firebaseAuth
 import com.example.ratemyculture.util.onMenuButtonClicked
 import com.example.ratemyculture.util.onProfileMenuClicked
@@ -31,7 +33,7 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        val TAG = "ProfileFragment"
+        const val TAG = "ProfileFragment"
     }
 
     private val currentUserId = firebaseAuth.currentUser?.uid
@@ -113,14 +115,15 @@ class ProfileFragment : Fragment() {
 
      */
     private fun initRecyclerView() {
-     viewModel.getUserSharings { itemList ->
-            val recyclerView: RecyclerView = binding.recyclerView
+        viewModel.getUserSharings { itemList ->
+            var recyclerView: RecyclerView = binding.recyclerView
             recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-            adapter = SharingAdapter(itemList)
+            adapter = SharingAdapter(itemList) {
+                onPhotoItemClick(it)
+            }
             recyclerView.adapter = adapter
         }
     }
-
 
     private fun openDropdown() {
         val imageView = requireView().findViewById<ImageView>(R.id.add_profile_picture)
@@ -162,5 +165,16 @@ class ProfileFragment : Fragment() {
             }
             binding.refresher.isRefreshing = false
         }
+    }
+
+    private fun onPhotoItemClick(sharing: Sharing) {
+        // Your action when an item is clicked
+        println("itemclicked ${sharing.photoUrl}")
+        val postFragment = PostFragment()
+        postFragment.setSharingData(sharing)
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.center, postFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

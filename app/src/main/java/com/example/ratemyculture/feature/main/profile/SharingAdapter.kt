@@ -10,7 +10,10 @@ import com.example.ratemyculture.R
 import com.example.ratemyculture.data.model.sharings.Sharing
 import com.squareup.picasso.Picasso
 
-class SharingAdapter(private var sharingList: List<Sharing>) : RecyclerView.Adapter<SharingAdapter.SharingViewHolder>() {
+class SharingAdapter(
+    private var sharingList: List<Sharing>,
+    private val onItemClick: (Sharing) -> Unit
+) : RecyclerView.Adapter<SharingAdapter.SharingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SharingViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.photo_item, parent, false)
@@ -27,9 +30,19 @@ class SharingAdapter(private var sharingList: List<Sharing>) : RecyclerView.Adap
     }
 
     inner class SharingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val image = itemView.findViewById<ImageView>(R.id.photo_item_image)
+
+        init {
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val sharing = sharingList[position]
+                    onItemClick(sharing)
+                }
+            }
+        }
+
         fun bind(item: Sharing) {
-            // Gerekli işlemler burada yapılabilir
-            val image = itemView.findViewById<ImageView>(R.id.photo_item_image)
             Picasso.get().load(item.photoUrl).into(image)
         }
     }
@@ -39,10 +52,4 @@ class SharingAdapter(private var sharingList: List<Sharing>) : RecyclerView.Adap
         sharingList = newList
         notifyDataSetChanged()
     }
-
 }
-
-
-
-
-

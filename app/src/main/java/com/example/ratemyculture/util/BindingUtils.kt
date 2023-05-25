@@ -8,6 +8,7 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.BindingAdapter
+import androidx.databinding.ObservableField
 import com.example.ratemyculture.R
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -26,6 +27,14 @@ fun setImageUri(imageView: CircleImageView, url: String?) {
 fun setImageBitmap(imageView: AppCompatImageView, bitmap: Bitmap?) {
     if (bitmap != null) {
         imageView.setImageBitmap(bitmap)
+    }
+}
+
+@BindingAdapter("app:obsSrc")
+fun setImageViewSrc(imageView: AppCompatImageView, imageUrl: ObservableField<String>) {
+    val url = imageUrl.get()
+    if (!url.isNullOrEmpty()) {
+        Picasso.get().load(url).into(imageView)
     }
 }
 

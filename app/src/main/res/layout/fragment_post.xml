@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".feature.main.post.PostFragment">
+
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.ratemyculture.feature.main.post.PostFragmentVM" />
+    </data>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toTopOf="@id/selectedPostImage"
+            app:layout_constraintEnd_toStartOf="@id/postUsername"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/postUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.username}"
+            app:layout_constraintStart_toEndOf="@id/profile_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/selectedPostImage"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/postDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.date}"
+            app:layout_constraintStart_toEndOf="@id/postUsername"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/selectedPostImage"/>
+
+
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/selectedPostImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:layout_editor_absoluteX="135dp"
+            tools:layout_editor_absoluteY="109dp"
+            app:obsSrc="@{viewModel.photoUrl}"
+            android:layout_marginVertical="100dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/postCaption"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/postCaption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.caption}"
+            android:textSize="16sp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectedPostImage"
+            android:gravity="start"
+            android:textAlignment="viewStart"
+            tools:text="caption"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
