@@ -20,19 +20,24 @@
             android:id="@+id/profile_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginStart="40dp"
             app:layout_constraintBottom_toTopOf="@id/selectedPostImage"
-            app:layout_constraintEnd_toStartOf="@id/postUsername"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.52"
+            app:src="@{viewModel.profilePicture}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/postUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{viewModel.username}"
+            android:layout_marginEnd="100dp"
+            app:layout_constraintBottom_toTopOf="@id/selectedPostImage"
+            app:layout_constraintEnd_toStartOf="@id/postDate"
             app:layout_constraintStart_toEndOf="@id/profile_image"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/selectedPostImage"/>
+            app:layout_constraintVertical_bias="0.493" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/postDate"

@@ -13,22 +13,17 @@ class PostFragmentVM: ViewModel() {
     var username = ObservableField<String>()
     var caption = ObservableField<String>()
     var date = ObservableField<String>()
+    var profilePicture = ObservableField<String>()
 
-
-    /*
     fun getCurrentPost(uid: String, context: Context) {
         uid.let {
-            val userData = fbDatabase.collection("sharings").document(uid)
+            val userData = fbDatabase.collection("users").document(uid)
             userData.get().addOnSuccessListener { document ->
                 if (document != null) {
                     val username = document.get("username").toString()
                     val photoUrl = document.get("photo_url").toString()
-                    val caption = document.get("caption").toString()
-                    val date = document.get("date").toString()
                     this.username.set(username)
-                    this.photoUrl.set(photoUrl)
-                    this.caption.set(caption)
-                    this.date.set(date)
+                    this.profilePicture.set(photoUrl)
                 } else {
                     println("No such document")
                 }
@@ -39,7 +34,4 @@ class PostFragmentVM: ViewModel() {
             }
         }
     }
-
-     */
-
 }

@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.ratemyculture.R
 import com.example.ratemyculture.data.model.sharings.Sharing
 import com.example.ratemyculture.databinding.FragmentPostBinding
+import com.example.ratemyculture.util.firebaseAuth
 import java.util.Date
 import java.util.Locale
 import kotlin.time.seconds
@@ -70,6 +71,7 @@ class PostFragment() : Fragment() {
             viewModel.date.set(it.uploadDate.toString())
         }
         setDate(viewModel.date.get() ?: "")
+        viewModel.getCurrentPost(firebaseAuth.uid ?: "", requireContext())
     }
 
     override fun onResume() {
@@ -79,7 +81,7 @@ class PostFragment() : Fragment() {
 
     private fun removePostFragment() {
         val fragmentManager = childFragmentManager
-        val fragment = fragmentManager.findFragmentByTag("PostFragment")
+        val fragment = fragmentManager.findFragmentByTag(TAG)
         if (fragment != null) {
             fragmentManager.beginTransaction().remove(fragment).commit()
         }
@@ -99,4 +101,6 @@ class PostFragment() : Fragment() {
 
         viewModel.date.set(formattedDate)
     }
+
+
 }
