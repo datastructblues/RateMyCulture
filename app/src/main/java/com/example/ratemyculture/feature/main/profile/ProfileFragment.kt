@@ -64,7 +64,6 @@ class ProfileFragment : Fragment() {
                 // There are no request codes
                 val data = result.data
                 startActivity(data)
-                requireActivity().finish()
                 // Handle the Intent
             }
         }

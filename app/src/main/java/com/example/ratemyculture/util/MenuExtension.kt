@@ -126,6 +126,9 @@ fun ProfileFragment.onProfileMenuClicked(item: MenuItem, signInLauncher: Activit
         R.id.sign_out -> {
             firebaseAuth.signOut()
             Log.d("ProfileFragment", "User signed out")
+            //clear fragment stack
+            requireActivity().finish()
+            activeFragment = null
             //todo navigate to login
             signInLauncher.launch(Intent(requireContext(), SignInActivity::class.java))
             true
