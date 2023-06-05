@@ -116,7 +116,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun addMyLocationMarker() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null){
+                val userLatLng = LatLng(location.latitude, location.longitude)
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
+            }
+        }
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -231,9 +236,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                     // şu konumda checkin yapıldı longitude ve latitude bilgileri ile ve places name ile
 
                                     //todo dont update userpoint for now
-                                    /*
                                     viewModel.updateUserPoint()
-
+                                    /*
                                     viewModel.userPoints.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
                                         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                                             Toast.makeText(requireContext(),"Point increased! New point: ${viewModel.userPoints.get()}",Toast.LENGTH_SHORT).show()
@@ -319,6 +323,11 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             val uploadIntent = Intent(context, UploadActivity::class.java)
             uploadIntent.putExtra("imageFile", imageFile)
             startActivity(uploadIntent)
+        }
+    }
+    private fun startCameraAtCurrentLocationOnStart(){
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
         }
     }
 }

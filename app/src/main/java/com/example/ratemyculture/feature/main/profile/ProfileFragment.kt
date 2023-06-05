@@ -159,6 +159,13 @@ class ProfileFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     private fun swipeRefresh() {
         binding.refresher.setOnRefreshListener {
+            //update user point
+            currentUserId?.let {
+                viewModel.getCurrentUserProfileData(
+                    it,
+                    requireContext()
+                )
+            }
             viewModel.getUserSharings { itemList ->
                 adapter?.updateList(itemList)
             }
