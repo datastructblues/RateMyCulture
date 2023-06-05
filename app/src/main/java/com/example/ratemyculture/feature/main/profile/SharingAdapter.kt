@@ -49,7 +49,7 @@ class SharingAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateList(newList: List<Sharing>) {
-        sharingList = emptyList()
+      //  sharingList = emptyList()
         sharingList = newList
         notifyDataSetChanged()
     }
