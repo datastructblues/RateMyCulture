@@ -1,5 +1,6 @@
 package com.example.ratemyculture.feature.upload
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.core.content.FileProvider
@@ -18,20 +19,30 @@ class UploadActivity : BaseActivity<ActivityUploadBinding, UploadVM>(), BaseNavi
     override val viewModel: UploadVM = UploadVM()
     private var mBinding: ActivityUploadBinding? = null
     private var uri: Uri? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = super.viewDataBinding
         viewModel.navigator = this
-        getIntentDataFromCamera()
+        controlIntent()
         uploadImageToStorage()
     }
 
     private fun getIntentDataFromCamera() {
         //get camera data from MapsFragment
-        val intent = intent
         val value = intent.getSerializableExtra("imageFile") as File
         setUploadedImageData(value)
+    }
+
+    private fun getIntentFromGallery() {
+        val value = intent.getParcelableExtra<Uri>("imageUri")
+        value?.let {
+            setUploadedImageData(it)
+        }
+    }
+    private fun setUploadedImageData(value: Uri) {
+        val view = mBinding?.uploadedImage
+        uri = value
+        view?.setImageURI(value)
     }
 
     private fun setUploadedImageData(value: File) {
@@ -44,8 +55,18 @@ class UploadActivity : BaseActivity<ActivityUploadBinding, UploadVM>(), BaseNavi
         val uploadButton = mBinding?.upload
         uploadButton?.setOnClickListener {
             val caption = mBinding?.caption?.text.toString()
-            viewModel.uploadSharing(uri,caption)
+            viewModel.uploadSharing(uri, caption)
             finish()
         }
     }
+
+    private fun controlIntent() {
+        if (intent.hasExtra("imageFile")) {
+            getIntentDataFromCamera()
+        } else if (intent.hasExtra("imageUri")) {
+            getIntentFromGallery()
+        }
+    }
+
+
 }

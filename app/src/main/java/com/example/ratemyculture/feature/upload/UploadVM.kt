@@ -10,6 +10,7 @@ import com.example.ratemyculture.util.fbDatabase
 import com.example.ratemyculture.util.fbStorage
 import com.example.ratemyculture.util.firebaseAuth
 import com.example.ratemyculture.util.getAuthCurrentUserUid
+import com.example.ratemyculture.util.getDocument
 import com.google.firebase.Timestamp
 import java.io.ByteArrayOutputStream
 import java.util.UUID
@@ -37,6 +38,7 @@ class UploadVM: BaseViewModel<BaseNavigator>() {
             imageRef.downloadUrl.addOnSuccessListener { uri ->
                 savePhotoToFirestore(uri.toString(), caption)
             }
+            updateUserPoint()
         }
     }
 
@@ -64,4 +66,17 @@ class UploadVM: BaseViewModel<BaseNavigator>() {
    // private fun getCurrentLocation():String{
      //   //todo locationu da tut
     //}
+
+    fun updateUserPoint() {
+        val userData = getDocument("users", firebaseAuth.currentUser?.uid.toString())
+        userData.get().addOnSuccessListener { document ->
+            if (document != null) {
+                val point = document.get("point").toString().toInt()
+                userData.update("point", point.plus(10))
+            } else {
+                println("No such document")
+            }
+        }.addOnFailureListener { exception ->
+        }
+    }
 }

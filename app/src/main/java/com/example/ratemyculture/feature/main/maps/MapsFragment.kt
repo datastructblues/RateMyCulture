@@ -3,27 +3,25 @@ package com.example.ratemyculture.feature.main.maps
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
-import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.location.Location
-import android.location.LocationManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.os.Looper
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.databinding.Observable
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.ratemyculture.R
@@ -43,9 +41,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import de.hdodenhof.circleimageview.CircleImageView
+import io.reactivex.rxjava3.core.Observable
 import java.io.File
 import java.io.IOException
 import java.util.Date
+import java.util.concurrent.TimeUnit
+
 
 class MapsFragment : Fragment(), OnMapReadyCallback {
 
@@ -55,21 +57,37 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
     private val viewModel: MapFragmentVM by viewModels()
 
-    companion object{
+    companion object {
         val TAG = "com.example.ratemyculture.feature.main.maps.MapsFragment"
         const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
 
 
-    private val openCamera= registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
+    private val openCamera =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
 
+            }
+        }
+
+    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        if (uri != null) {
+            //send to upload activity
+            //start new activity after 1 second
+            val rx = Observable.timer(1, TimeUnit.SECONDS)
+                .subscribe {
+                    val intent = Intent(context, UploadActivity::class.java)
+                    intent.putExtra("imageUri", uri)
+                    startActivity(intent)
+                }
+        } else {
+            Log.d("PhotoPicker", "No media selected")
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -108,8 +126,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
     private fun createLocationRequest() {
         locationRequest = LocationRequest.create().apply {
-            interval = 10000 // Sets the desired interval for active location updates, in milliseconds.
-            fastestInterval = 5000 // Sets the fastest rate for active location updates, in milliseconds.
+            interval =
+                10000 // Sets the desired interval for active location updates, in milliseconds.
+            fastestInterval =
+                5000 // Sets the fastest rate for active location updates, in milliseconds.
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
@@ -117,7 +137,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private fun addMyLocationMarker() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            if (location != null){
+            if (location != null) {
                 val userLatLng = LatLng(location.latitude, location.longitude)
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15f))
             }
@@ -144,7 +164,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun addMarkers() {
-       val icon= MarkerOptions().drawableToBitmapDescriptor(R.drawable.athens,requireContext())
+        val icon = MarkerOptions().drawableToBitmapDescriptor(R.drawable.athens, requireContext())
         places.forEach { place ->
             googleMap.addMarker(
                 MarkerOptions()
@@ -173,60 +193,71 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 p0 ?: return
-                for (location in p0.locations){
+                for (location in p0.locations) {
                     val latLng = LatLng(location.latitude, location.longitude)
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10f))
                 }
-                }
-            }
-    }
-/*
-    private fun startLocationUpdates() {
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                locationResult ?: return
-                locationResult.locations.forEach { location ->
-                    val latLng = LatLng(location.latitude, location.longitude)
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-                }
             }
         }
+    }
+    /*
+        private fun startLocationUpdates() {
+            locationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    locationResult ?: return
+                    locationResult.locations.forEach { location ->
+                        val latLng = LatLng(location.latitude, location.longitude)
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
+                    }
+                }
+            }
 
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
+            if (ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
+
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
         }
+        */
 
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
-        )
-    }
-    */
-
-    private fun listenMarkers(){
-       computeDistanceOfUserAndMarker()
+    private fun listenMarkers() {
+        computeDistanceOfUserAndMarker()
     }
 
-    private fun computeDistanceOfUserAndMarker(){
+    private fun computeDistanceOfUserAndMarker() {
         googleMap.setOnMarkerClickListener { clickedMarker ->
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 clickedMarker.showInfoWindow()
-                val fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+                val fusedLocationProviderClient =
+                    LocationServices.getFusedLocationProviderClient(requireActivity())
                 fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                    if (location != null){
+                    if (location != null) {
                         val userLatLng = LatLng(location.latitude, location.longitude)
                         val distance = FloatArray(1)
                         println("marker: ${clickedMarker.position}")
                         println("user: $userLatLng")
-                        Location.distanceBetween(userLatLng.latitude, userLatLng.longitude, clickedMarker.position.latitude, clickedMarker.position.longitude, distance)
+                        Location.distanceBetween(
+                            userLatLng.latitude,
+                            userLatLng.longitude,
+                            clickedMarker.position.latitude,
+                            clickedMarker.position.longitude,
+                            distance
+                        )
                         //todo distance şimdilik 1000 sonra değiştirirsin.
                         if (distance[0] < 1000) {
                             val builder = AlertDialog.Builder(requireContext())
@@ -236,7 +267,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                     // şu konumda checkin yapıldı longitude ve latitude bilgileri ile ve places name ile
 
                                     //todo dont update userpoint for now
-                                    viewModel.updateUserPoint()
                                     /*
                                     viewModel.userPoints.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
                                         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
@@ -246,7 +276,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
 
                                      */
 
-                                    openCamera()
+                                    showOptionsDialog()
+
 
                                     println("checkin: ${clickedMarker.title}")
                                     //  viewModel.checkIn(clickedMarker.position.latitude, clickedMarker.position.longitude)
@@ -254,8 +285,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                 .setNegativeButton("No") { dialog, _ -> dialog.cancel() }
                             val alert = builder.create()
                             alert.show()
-                        } else{
-                            Toast.makeText(requireContext(),"You are far away from the location!",Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "You are far away from the location!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -266,10 +301,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun openCamera() {
-        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             context?.openAppSystemSettings()
-        }else{
-           dispatchTakePictureIntent()
+        } else {
+            dispatchTakePictureIntent()
         }
     }
 
@@ -293,11 +332,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                   startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                 }
             }
         }
     }
+
     lateinit var currentPhotoPath: String
 
     @Throws(IOException::class)
@@ -314,6 +354,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             currentPhotoPath = absolutePath
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -325,9 +366,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             startActivity(uploadIntent)
         }
     }
-    private fun startCameraAtCurrentLocationOnStart(){
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
+    private fun showOptionsDialog() {
+        val items = arrayOf<CharSequence>("Camera", "Gallery")
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Choose an option")
+        builder.setItems(items) { dialog, item ->
+            if (item == 0) {
+                openCamera()
+            } else if (item == 1) {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
         }
+        builder.show()
     }
 }
