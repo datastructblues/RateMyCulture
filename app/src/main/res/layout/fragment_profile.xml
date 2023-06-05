@@ -88,6 +88,7 @@
             android:layout_height="0dp"
             app:spanCount="3"
             android:scrollbars="vertical"
+            android:background="@color/app_bg"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
