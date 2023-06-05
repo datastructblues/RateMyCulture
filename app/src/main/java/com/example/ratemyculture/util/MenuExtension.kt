@@ -11,7 +11,9 @@ import com.example.ratemyculture.R
 import com.example.ratemyculture.feature.main.MainActivity
 import com.example.ratemyculture.feature.main.maps.MapsFragment
 import com.example.ratemyculture.feature.main.profile.ProfileFragment
+import com.example.ratemyculture.feature.main.profile.ProfileFragmentVM
 import com.example.ratemyculture.feature.signin.SignInActivity
+import de.hdodenhof.circleimageview.CircleImageView
 
 /*
 
@@ -98,7 +100,8 @@ fun MainActivity.onNavigationButtonClicked(item: MenuItem): Boolean {
 
 fun ProfileFragment.onMenuButtonClicked(
     item: MenuItem,
-    pickMedia: ActivityResultLauncher<PickVisualMediaRequest>
+    pickMedia: ActivityResultLauncher<PickVisualMediaRequest>,
+    viewModel: ProfileFragmentVM
 ): Boolean {
     return when (item.itemId) {
         R.id.action_add -> {
@@ -114,6 +117,10 @@ fun ProfileFragment.onMenuButtonClicked(
 
         R.id.action_delete -> {
             //todo delete
+            viewModel.photoUrl.set("null")
+            viewModel.updateProfilePicture(
+                firebaseAuth.currentUser!!.uid,
+                viewModel.photoUrl.get()!!)
             true
         }
 

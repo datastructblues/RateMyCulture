@@ -138,7 +138,7 @@ class ProfileFragment : Fragment() {
                 menuItem.isEnabled = false
             }
             popupMenu.setOnMenuItemClickListener { menuItem ->
-                onMenuButtonClicked(menuItem, pickMedia)
+                onMenuButtonClicked(menuItem, pickMedia,viewModel)
             }
             popupMenu.show()
         }

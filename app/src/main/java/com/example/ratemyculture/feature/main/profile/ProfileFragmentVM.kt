@@ -125,4 +125,18 @@ class ProfileFragmentVM : ViewModel() {
         }
         return sharingList
     }
+
+    fun updateProfilePicture(uid:String,photoUrl:String) {
+        val userData = fbDatabase.collection("users").document(uid)
+        userData.get().addOnSuccessListener { document ->
+            if (document != null) {
+                //set document field
+                userData.update("photo_url", photoUrl)
+            } else {
+                println("No such document")
+            }
+        }.addOnFailureListener { exception ->
+
+        }
+    }
 }
