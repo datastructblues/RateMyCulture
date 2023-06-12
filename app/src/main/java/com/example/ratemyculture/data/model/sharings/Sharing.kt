@@ -8,4 +8,5 @@ data class Sharing(
     val caption: String = "",
   //  val location: String,
     val uploadDate: Timestamp = Timestamp.now(),
+    val location:String = ""
 )

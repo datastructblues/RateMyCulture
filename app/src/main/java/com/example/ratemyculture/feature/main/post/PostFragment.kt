@@ -69,6 +69,7 @@ class PostFragment() : Fragment() {
             viewModel.username.set(it.userId)
             viewModel.caption.set(it.caption)
             viewModel.date.set(it.uploadDate.toString())
+            viewModel.location.set(it.location)
         }
         setDate(viewModel.date.get() ?: "")
         viewModel.getCurrentPost(firebaseAuth.uid ?: "", requireContext())

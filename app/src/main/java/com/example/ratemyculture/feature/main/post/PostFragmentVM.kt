@@ -14,6 +14,7 @@ class PostFragmentVM: ViewModel() {
     var caption = ObservableField<String>()
     var date = ObservableField<String>()
     var profilePicture = ObservableField<String>()
+    var location = ObservableField<String>()
 
     fun getCurrentPost(uid: String, context: Context) {
         uid.let {

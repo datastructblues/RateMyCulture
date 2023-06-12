@@ -5,6 +5,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import com.example.ratemyculture.core.base.BaseNavigator
 import com.example.ratemyculture.core.base.BaseViewModel
+import com.example.ratemyculture.data.model.place.Place
+import com.example.ratemyculture.data.model.place.PlacesReader
 import com.example.ratemyculture.data.model.sharings.Sharing
 import com.example.ratemyculture.util.fbDatabase
 import com.example.ratemyculture.util.fbStorage
@@ -18,8 +20,7 @@ import java.util.UUID
 
 class UploadVM: BaseViewModel<BaseNavigator>() {
 
-
-    fun uploadSharing(uri: Uri?,caption:String) {
+    fun uploadSharing(uri: Uri?,caption:String,selectedMarker:String?) {
         val fileName = UUID.randomUUID().toString()
         val storageRef = fbStorage.reference
         val imageRef = storageRef.child("images/${firebaseAuth.currentUser?.uid}/$fileName")
@@ -36,7 +37,7 @@ class UploadVM: BaseViewModel<BaseNavigator>() {
             // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
             // ...
             imageRef.downloadUrl.addOnSuccessListener { uri ->
-                savePhotoToFirestore(uri.toString(), caption)
+                savePhotoToFirestore(uri.toString(), caption,selectedMarker?:"")
             }
             updateUserPoint()
         }
@@ -46,14 +47,14 @@ class UploadVM: BaseViewModel<BaseNavigator>() {
         navigator?.finishActivity()
     }
 
-    private fun savePhotoToFirestore(photoUrl: String, caption: String){
+    private fun savePhotoToFirestore(photoUrl: String, caption: String,selectedMarker: String){
         fbDatabase.collection("sharings").document().set(
             Sharing(
                 getAuthCurrentUserUid(),
                 photoUrl,
                 caption,
-            //    getCurrentLocation(),
-                getCurrentDate()
+                getCurrentDate(),
+                selectedMarker
             )
         )
 

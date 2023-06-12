@@ -65,6 +65,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
+    private var selectedMarker: String? = null
 
 
     private val openCamera =
@@ -82,6 +83,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                 .subscribe {
                     val intent = Intent(context, UploadActivity::class.java)
                     intent.putExtra("imageUri", uri)
+                    intent.putExtra("selectedMarker", selectedMarker)
                     startActivity(intent)
                 }
         } else {
@@ -275,7 +277,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
                                     })
 
                                      */
-
+                                    selectedMarker = clickedMarker.title
                                     showOptionsDialog()
 
 
@@ -363,6 +365,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback {
             // Pass the imageFile to your upload activity
             val uploadIntent = Intent(context, UploadActivity::class.java)
             uploadIntent.putExtra("imageFile", imageFile)
+            uploadIntent.putExtra("selectedMarker", selectedMarker)
             startActivity(uploadIntent)
         }
     }

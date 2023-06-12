@@ -8,6 +8,8 @@ import com.example.ratemyculture.BR
 import com.example.ratemyculture.R
 import com.example.ratemyculture.core.base.BaseActivity
 import com.example.ratemyculture.core.base.BaseNavigator
+import com.example.ratemyculture.data.model.place.Place
+import com.example.ratemyculture.data.model.place.PlacesReader
 import com.example.ratemyculture.databinding.ActivityUploadBinding
 import java.io.File
 
@@ -19,6 +21,8 @@ class UploadActivity : BaseActivity<ActivityUploadBinding, UploadVM>(), BaseNavi
     override val viewModel: UploadVM = UploadVM()
     private var mBinding: ActivityUploadBinding? = null
     private var uri: Uri? = null
+    private var selectedMarker: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = super.viewDataBinding
@@ -53,9 +57,10 @@ class UploadActivity : BaseActivity<ActivityUploadBinding, UploadVM>(), BaseNavi
 
     private fun uploadImageToStorage() {
         val uploadButton = mBinding?.upload
+        selectedMarker = getLocation()
         uploadButton?.setOnClickListener {
             val caption = mBinding?.caption?.text.toString()
-            viewModel.uploadSharing(uri, caption)
+            viewModel.uploadSharing(uri, caption, selectedMarker)
             finish()
         }
     }
@@ -68,5 +73,10 @@ class UploadActivity : BaseActivity<ActivityUploadBinding, UploadVM>(), BaseNavi
         }
     }
 
+    private fun getLocation():String?{
+        return intent.getStringExtra("selectedMarker")
+
+
+    }
 
 }
